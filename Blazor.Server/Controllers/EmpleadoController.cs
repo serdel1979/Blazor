@@ -44,7 +44,7 @@ namespace Blazor.Server.Controllers
                         }
                     });
                 }
-
+                response.IsSuccess = true;
                 return Ok(response);
             }
             catch (Exception ex)
