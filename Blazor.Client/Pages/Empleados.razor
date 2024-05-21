@@ -31,7 +31,7 @@
                 </td>
             </tr>
         }
-        else
+        else if(listEmpleados.Count > 0)
         {
             @foreach(var item in listEmpleados)
             {
@@ -39,23 +39,18 @@
                     <td>
                         @item.NombreCompleto
                     </td>
-                </tr>
-                <tr>
+    
                     <td>
                         @item.Departamento!.Nombre
                     </td>
-                </tr>
-                <tr>
                     <td>
                         @item.Sueldo
                     </td>
-                </tr>
-                <tr>
                     <td>
-                        @item.FechaContrato
+                        @item.FechaContrato.ToString("dd/MM/yyyy")
                     </td>
-                </tr>
-                <tr>
+
+                    <td>
                        <a class="btn btn-primary btn-sm" href="empleado/@item.Id">
                           <i class="oi oi-pencil"></i>
                        </a>
@@ -64,10 +59,16 @@
                        @onclick="(()=>Eliminar(item.Id))">
                         <i class="oi oi-trash"></i>
                        </button>
-
+                    </td>
 
                 </tr>
             }
+        }else{
+            <tr>
+                <td colspan="5" align="center">
+                    <p>Nada por ahora...</p>                   
+                </td>
+            </tr>
         }
     </tbody>
 </table>
