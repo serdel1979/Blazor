@@ -63,7 +63,7 @@ namespace Blazor.Server.Controllers
             response.Data = new EmpleadoDTO();
             try
             {
-                var entityEmpleado = await _context.Empleados.FirstOrDefaultAsync(e => e.Id == Id);
+                var entityEmpleado = await _context.Empleados.Include(e=>e.IdDepartamentoNavigation).FirstOrDefaultAsync(e => e.Id == Id);
                 if (entityEmpleado == null)
                 {
                     throw new KeyNotFoundException();
@@ -117,6 +117,8 @@ namespace Blazor.Server.Controllers
                 await _context.SaveChangesAsync();
         
                 response.IsSuccess = true;
+                response.Data = empleado;
+                response.Message = "Empleado creado";
                 return Ok(response);
             }
             catch (Exception ex)
@@ -132,8 +134,8 @@ namespace Blazor.Server.Controllers
         [HttpDelete("Id:int")]
         public async Task<IActionResult> DeleteEmpleado(int Id)
         {
-            ResponseApi<EmpleadoDTO> response = new ResponseApi<EmpleadoDTO>();
-            response.Data = new EmpleadoDTO();
+            ResponseApi<bool> response = new ResponseApi<bool>();
+
             try
             {
                 var delet = await _context.Empleados.FirstOrDefaultAsync(e => e.Id == Id);
@@ -146,18 +148,21 @@ namespace Blazor.Server.Controllers
                 await _context.SaveChangesAsync();
                 response.Message = $"Empleado con Id {Id} borrado!!!";
                 response.IsSuccess = true;
+                response.Data = true;
                 return Ok(response);
             }
             catch (KeyNotFoundException ex)
             {
                 response.IsSuccess = false;
                 response.Message = ex.Message;
+                response.Data = false;
                 return StatusCode(404, response);
             }
             catch (Exception ex)
             {
                 response.IsSuccess = false;
                 response.Message = ex.Message;
+                response.Data = false;
                 return StatusCode(500, response);
             }
         }
@@ -186,6 +191,7 @@ namespace Blazor.Server.Controllers
                 await _context.SaveChangesAsync();
                 response.Message = $"Empleado con Id {Id} actualizado!!!";
                 response.IsSuccess = true;
+                response.Data = empleado;
                 return Ok(response);
             }
             catch (KeyNotFoundException ex)
