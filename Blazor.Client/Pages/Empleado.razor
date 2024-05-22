@@ -21,13 +21,16 @@
 
     <div class="mb-3">
         <label class="form-label">Departamento</label>
-        <InputSelect class="form-select" @bind-Value="empleado.IdDepartamento">
-            <option value="0">--Seleccionar Departamento--</option>
-            @foreach (var item in listaDepartamentos)
-            {
-                <option value="@item.Id">@item.Nombre</option>
-            }
-        </InputSelect>
+        @if (listaDepartamentos != null)
+        {
+            <InputSelect class="form-select" @bind-Value="empleado.IdDepartamento">
+                <option value="0">--Seleccionar Departamento--</option>
+                @foreach (var item in listaDepartamentos!)
+                {
+                    <option value="@item.Id">@item.Nombre</option>
+                }
+            </InputSelect>
+        }
         <ValidationMessage For="@(() => empleado.IdDepartamento)"></ValidationMessage>
     </div>
 
@@ -100,10 +103,8 @@
                 empl = await empleadoService.Update(Id, empleado);
             }
 
-            if (empl.Id != 0)
-            {
-                naviate.NavigateTo("/empleados");
-            }
+            naviate.NavigateTo("/empleados");
+        
         }
         catch (Exception ex)
         {

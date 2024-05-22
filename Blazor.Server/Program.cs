@@ -17,11 +17,11 @@ builder.Services.AddDbContext<DbcrudBlazorContext>(option =>
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("nueva", app =>
+    options.AddPolicy("all", app =>
     {
-        app.AllowAnyOrigin()
-        .AllowAnyHeader()
-        .AllowAnyMethod();
+        app.WithOrigins("*")
+           .AllowAnyMethod()
+           .AllowAnyHeader();
     });
 });
 
@@ -36,7 +36,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseCors("nueva");
+app.UseCors("all");
 
 app.UseAuthorization();
 

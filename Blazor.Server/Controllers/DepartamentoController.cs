@@ -32,7 +32,8 @@ namespace Blazor.Server.Controllers
                         Nombre = item.Nombre,
                     });
                 }
-
+                response.IsSuccess = true;
+                response.Message = "Listado";
                 return Ok(response);
             }
             catch (Exception ex)

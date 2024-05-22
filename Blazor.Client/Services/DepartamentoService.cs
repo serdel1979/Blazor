@@ -13,7 +13,7 @@ namespace Blazor.Client.Services
         }
         public async Task<List<DepartamentoDTO>> Lista()
         {
-            var result = await _http.GetFromJsonAsync<ResponseApi<List<DepartamentoDTO>>>("api/departamento");
+            var result = await _http.GetFromJsonAsync<ResponseApi<List<DepartamentoDTO>>>("/api/departamento");
             if(result!.IsSuccess)
             {
                 return result.Data!;

@@ -56,7 +56,8 @@ namespace Blazor.Server.Controllers
         }
 
 
-        [HttpGet("Id:int")]
+
+        [HttpGet("{Id:int}")]
         public async Task<IActionResult> GetEmpleado(int Id)
         {
             ResponseApi<EmpleadoDTO> response = new ResponseApi<EmpleadoDTO>();
@@ -131,7 +132,7 @@ namespace Blazor.Server.Controllers
 
 
 
-        [HttpDelete("Id:int")]
+        [HttpDelete("{Id:int}")]
         public async Task<IActionResult> DeleteEmpleado(int Id)
         {
             ResponseApi<bool> response = new ResponseApi<bool>();
@@ -169,7 +170,7 @@ namespace Blazor.Server.Controllers
 
 
 
-        [HttpPut("Id:int")]
+        [HttpPut("{Id:int}")]
         public async Task<IActionResult> UpdateEmpleado(int Id, EmpleadoDTO empleado)
         {
             ResponseApi<EmpleadoDTO> response = new ResponseApi<EmpleadoDTO>();
