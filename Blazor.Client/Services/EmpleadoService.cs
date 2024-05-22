@@ -75,7 +75,7 @@ namespace Blazor.Client.Services
 
         public async Task<EmpleadoDTO> Update(int Id, EmpleadoDTO empleado)
         {
-            var result = await _http.PutAsJsonAsync($"/api/empleado{Id}", empleado);
+            var result = await _http.PutAsJsonAsync($"/api/empleado/{Id}", empleado);
             var response = await result.Content.ReadFromJsonAsync<ResponseApi<EmpleadoDTO>>();
             if (response!.IsSuccess)
             {

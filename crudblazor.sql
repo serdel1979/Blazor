@@ -20,7 +20,7 @@ insert into Departamento(Nombre) values
 ('Ventas'),
 ('Comercio')
 
-select * from Departamento
+select * from Empleado
 
 insert into Empleado(NombreCompleto, IdDepartamento, FechaContrato, Sueldo) values
 ('Mario Mordini',2,GETDATE(),3211);
