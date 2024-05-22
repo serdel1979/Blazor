@@ -16,11 +16,11 @@
     <div class="mb-3">
         <label class="form-label">Nombre Completo</label>
         <InputText class="form-control" @bind-Value="empleado.NombreCompleto"></InputText>
-        <ValidationMessage For="@(()=>empleado.NombreCompleto)"></ValidationMessage>
+        <ValidationMessage For="@(() => empleado.NombreCompleto)"></ValidationMessage>
     </div>
 
-     <div class="mb-3">
-        <label class="form-label">Nombre Completo</label>
+    <div class="mb-3">
+        <label class="form-label">Departamento</label>
         <InputSelect class="form-select" @bind-Value="empleado.IdDepartamento">
             <option value="0">--Seleccionar Departamento--</option>
             @foreach (var item in listaDepartamentos)
@@ -28,19 +28,19 @@
                 <option value="@item.Id">@item.Nombre</option>
             }
         </InputSelect>
-        <ValidationMessage For="@(()=>empleado.IdDepartamento)"></ValidationMessage>
+        <ValidationMessage For="@(() => empleado.IdDepartamento)"></ValidationMessage>
     </div>
 
-     <div class="mb-3">
+    <div class="mb-3">
         <label class="form-label">Sueldo</label>
         <InputNumber class="form-control" @bind-Value="empleado.Sueldo"></InputNumber>
-        <ValidationMessage For="@(()=>empleado.Sueldo)"></ValidationMessage>
+        <ValidationMessage For="@(() => empleado.Sueldo)"></ValidationMessage>
     </div>
 
     <div class="mb-3">
         <label class="form-label">Fecha de contrato</label>
         <InputDate class="form-control" @bind-Value="empleado.FechaContrato"></InputDate>
-        <ValidationMessage For="@(()=>empleado.FechaContrato)"></ValidationMessage>
+        <ValidationMessage For="@(() => empleado.FechaContrato)"></ValidationMessage>
     </div>
 
     <button class="btn btn-primary" type="submit">
@@ -56,45 +56,59 @@
     [Parameter]
     public int Id { get; set; } = 0;
 
-    string Titulo = String.Empty;
+    string Titulo = string.Empty;
     string btnTexto = string.Empty;
 
     EmpleadoDTO empleado = new EmpleadoDTO();
-
     List<DepartamentoDTO>? listaDepartamentos = null;
 
     protected override async Task OnInitializedAsync()
     {
-        if(Id != 0)
+        try
         {
-            empleado = await empleadoService.GetById(Id);
-            btnTexto = "Actualizar empleado";
-            Titulo = "Editar empleado";
+            if (Id != 0)
+            {
+                empleado = await empleadoService.GetById(Id);
+                btnTexto = "Actualizar empleado";
+                Titulo = "Editar empleado";
+            }
+            else
+            {
+                empleado.FechaContrato = DateTime.Today;
+                btnTexto = "Guardar empleado";
+            }
+            listaDepartamentos = await departamentoService.Lista();
         }
-        else
+        catch (Exception ex)
         {
-            empleado.FechaContrato = DateTime.Today;
-            btnTexto = "Guardar empleado";
+            Console.WriteLine($"Error initializing component: {ex.Message}");
+            // Manejo de errores adicional si es necesario
         }
-        listaDepartamentos = await departamentoService.Lista();
     }
-
 
     private async Task OnValidSubmit()
     {
-        EmpleadoDTO empl = new EmpleadoDTO();
-        if(Id == 0)
+        try
         {
-            empl = await empleadoService.Create(empleado);
+            EmpleadoDTO empl = new EmpleadoDTO();
+            if (Id == 0)
+            {
+                empl = await empleadoService.Create(empleado);
+            }
+            else
+            {
+                empl = await empleadoService.Update(Id, empleado);
+            }
+
+            if (empl.Id != 0)
+            {
+                naviate.NavigateTo("/empleados");
+            }
         }
-        else
+        catch (Exception ex)
         {
-            empl = await empleadoService.Update(Id, empl);
-        }
-        if(empl.Id != 0)
-        {
-            naviate.NavigateTo("/empleados");
+            Console.WriteLine($"Error on form submission: {ex.Message}");
+            // Manejo de errores adicional si es necesario
         }
     }
-
 }
